@@ -15,18 +15,31 @@ interface Props {
     name: string;
     url: string;
   }
+  level: number;
+  color: string;
 }
+
+const DividerWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
+const Text = styled.div<{ color: string }>`
+  text-align: center;
+  color: ${({ color }) => color};
+  font-size: 12px;
+`;
 
 const Divider = styled.div`
   background-color: #D1D5DB;
   border-radius: 12px;
   height: 8px;
-  width: 100%;
   margin-inline: 8px;
+  margin-top: 4px;
 `;
 
 const ImageWrapper = styled.div`
-  width: 128px;
 `;
 
 const Image = styled.img`
@@ -42,7 +55,7 @@ const Base = styled.li`
   align-items: center;
 `;
 
-const EvolutionStage: React.FC<Props> = ({ from, to }) => {
+const EvolutionStage: React.FC<Props> = ({ from, to, level, color }) => {
   const results = useQueries(
     [from.name, to.name].map((name, idx) => ({
       queryKey: ['evolution', idx],
@@ -57,7 +70,10 @@ const EvolutionStage: React.FC<Props> = ({ from, to }) => {
       <ImageWrapper>
         <Image src={fromPokemon.data?.data.sprites.other["official-artwork"].front_default} />
       </ImageWrapper>
-      <Divider />
+      <DividerWrapper>
+        <Text color={color}>{`Level ${level}`}</Text>
+        <Divider />
+      </DividerWrapper>
       <ImageWrapper>
         <Image src={toPokemon.data?.data.sprites.other["official-artwork"].front_default} />
       </ImageWrapper>

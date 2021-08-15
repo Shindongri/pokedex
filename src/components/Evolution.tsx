@@ -52,7 +52,7 @@ const List = styled.ul`
 const Evolution: React.FC<Props> = ({ speciesData, id, color }) => {
   const { data, isLoading, isError, isSuccess } = useQuery<AxiosResponse<EvolutionChainResponse>, Error>(['evolution', { id }], () => axios.get(speciesData.evolution_chain.url), { retry: false, refetchOnWindowFocus: false });
 
-  const [evolutionChain, setEvolutionChain] = useState<Array<Array<{ name: string; url: string }>>>([]);
+  const [evolutionChain, setEvolutionChain] = useState<Array<{ from: { name: string; url: string }, to: { name: string; url: string }, level: number }>>([]);
 
   const makeEvolutionChain = (chain: Chain) => {
     if (chain.evolves_to.length) {
@@ -60,8 +60,9 @@ const Evolution: React.FC<Props> = ({ speciesData, id, color }) => {
 
       const from = chain.species;
       const to = evolvesTo.species;
+      const level = evolvesTo.evolution_details[0].min_level;
 
-      setEvolutionChain(prev => [...prev, [from, to]]);
+      setEvolutionChain(prev => [...prev, { from, to, level }]);
 
       makeEvolutionChain(chain.evolves_to[0]);
     }
@@ -82,8 +83,8 @@ const Evolution: React.FC<Props> = ({ speciesData, id, color }) => {
         ) : (
           <List>
             {
-              evolutionChain.map(([from, to], idx) => (
-                <EvolutionStage key={idx} from={from} to={to} />
+              evolutionChain.map(({ from, to, level }, idx) => (
+                <EvolutionStage key={idx} from={from} to={to} level={level} color={color} />
               ))
             }
           </List>
