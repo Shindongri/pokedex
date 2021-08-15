@@ -70,7 +70,7 @@ const Evolution: React.FC<Props> = ({ speciesData, id, color }) => {
 
   useEffect(() => {
     isSuccess && data && makeEvolutionChain(data.data.chain);
-  }, [isSuccess, data]);
+  }, [isSuccess, data, makeEvolutionChain]);
 
   return (
     <Base>
