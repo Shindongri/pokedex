@@ -5,6 +5,7 @@ import styled from "@emotion/styled/macro";
 
 import { Chain, EvolutionChainResponse, SpeciesResponse } from '../types';
 import EvolutionStage from "./EvolutionStage";
+import {mapColorToHex} from "../utils";
 
 type Props = {
   id?: string;
@@ -49,6 +50,18 @@ const List = styled.ul`
   }
 `;
 
+const EmptyWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: calc(100vh - 444px);
+`;
+
+const Empty = styled.div<{ color: string }>`
+  color: ${({ color }) => color};
+`;
+
 const Evolution: React.FC<Props> = ({ speciesData, id, color }) => {
   const { data, isLoading, isSuccess } = useQuery<AxiosResponse<EvolutionChainResponse>, Error>(['evolution', { id }], () => axios.get(speciesData.evolution_chain.url), { retry: false, refetchOnWindowFocus: false });
 
@@ -74,20 +87,26 @@ const Evolution: React.FC<Props> = ({ speciesData, id, color }) => {
 
   return (
     <Base>
-      <Title color={color}>Evolution</Title>
+      <Title color={mapColorToHex(color)}>Evolution</Title>
       {
         isLoading ? (
           <ImageWrapper>
             <Image src="/pocketball.svg" />
           </ImageWrapper>
         ) : (
-          <List>
-            {
-              evolutionChain.map(({ from, to, level }, idx) => (
-                <EvolutionStage key={idx} from={from} to={to} level={level} color={color} />
-              ))
-            }
-          </List>
+          evolutionChain.length ? (
+            <List>
+              {
+                evolutionChain.map(({ from, to, level }, idx) => (
+                  <EvolutionStage key={idx} from={from} to={to} level={level} color={color} />
+                ))
+              }
+            </List>
+          ) : (
+            <EmptyWrapper>
+              <Empty color={mapColorToHex(color)}>This Pokémon does not evolve.</Empty>
+            </EmptyWrapper>
+          )
         )
       }
     </Base>

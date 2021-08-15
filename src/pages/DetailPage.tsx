@@ -12,6 +12,7 @@ import Evolution from '../components/Evolution';
 
 import { PokemonResponse, SpeciesResponse } from '../types';
 import { pokemonApi, speciesApi } from '../apis/poketmonApi';
+import {mapColorToHex} from "../utils";
 
 type Params = {
   id?: string;
@@ -44,7 +45,7 @@ const DetailPage: React.FC = () => {
     <Container>
       <PokemonInfo pokemonData={pokemonData?.data} speciesData={speciesData?.data} />
       <TabsWrapper>
-        <Tabs color={speciesData?.data.color.name || '#6B7280'} tab={selectedTab} onClick={handleTabClick} />
+        <Tabs color={mapColorToHex(speciesData?.data.color.name)} tab={selectedTab} onClick={handleTabClick} />
       </TabsWrapper>
       {
         selectedTab === 'about' && (
