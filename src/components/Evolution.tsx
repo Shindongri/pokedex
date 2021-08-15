@@ -50,7 +50,7 @@ const List = styled.ul`
 `;
 
 const Evolution: React.FC<Props> = ({ speciesData, id, color }) => {
-  const { data, isLoading, isError, isSuccess } = useQuery<AxiosResponse<EvolutionChainResponse>, Error>(['evolution', { id }], () => axios.get(speciesData.evolution_chain.url), { retry: false, refetchOnWindowFocus: false });
+  const { data, isLoading, isSuccess } = useQuery<AxiosResponse<EvolutionChainResponse>, Error>(['evolution', { id }], () => axios.get(speciesData.evolution_chain.url), { retry: false, refetchOnWindowFocus: false });
 
   const [evolutionChain, setEvolutionChain] = useState<Array<{ from: { name: string; url: string }, to: { name: string; url: string }, level: number }>>([]);
 
@@ -70,7 +70,7 @@ const Evolution: React.FC<Props> = ({ speciesData, id, color }) => {
 
   useEffect(() => {
     isSuccess && data && makeEvolutionChain(data.data.chain);
-  }, [isSuccess]);
+  }, [isSuccess, data]);
 
   return (
     <Base>
