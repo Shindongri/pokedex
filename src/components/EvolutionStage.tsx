@@ -1,10 +1,11 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import { useQueries } from 'react-query';
-import axios, {AxiosResponse} from 'axios';
+import { AxiosResponse } from 'axios';
 import styled from '@emotion/styled/macro';
-import {UseQueryOptions, UseQueryResult} from "react-query/types/react/types";
-import {PokemonResponse, SpeciesResponse} from "../types";
-import {pokemonApi} from "../apis/poketmonApi";
+import { UseQueryResult } from 'react-query/types/react/types';
+
+import { PokemonResponse } from '../types';
+import { pokemonApi } from '../apis/poketmonApi';
 
 interface Props {
   from: {
