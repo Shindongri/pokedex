@@ -54,23 +54,23 @@ const Evolution: React.FC<Props> = ({ speciesData, id, color }) => {
 
   const [evolutionChain, setEvolutionChain] = useState<Array<{ from: { name: string; url: string }, to: { name: string; url: string }, level: number }>>([]);
 
-  const makeEvolutionChain = (chain: Chain) => {
-    if (chain.evolves_to.length) {
-      const [evolvesTo] = chain.evolves_to;
-
-      const from = chain.species;
-      const to = evolvesTo.species;
-      const level = evolvesTo.evolution_details[0].min_level;
-
-      setEvolutionChain(prev => [...prev, { from, to, level }]);
-
-      makeEvolutionChain(chain.evolves_to[0]);
-    }
-  }
-
   useEffect(() => {
+    const makeEvolutionChain = (chain: Chain) => {
+      if (chain.evolves_to.length) {
+        const [evolvesTo] = chain.evolves_to;
+
+        const from = chain.species;
+        const to = evolvesTo.species;
+        const level = evolvesTo.evolution_details[0].min_level;
+
+        setEvolutionChain(prev => [...prev, { from, to, level }]);
+
+        makeEvolutionChain(chain.evolves_to[0]);
+      }
+    }
+
     isSuccess && data && makeEvolutionChain(data.data.chain);
-  }, [isSuccess, data, makeEvolutionChain]);
+  }, [isSuccess, data]);
 
   return (
     <Base>
