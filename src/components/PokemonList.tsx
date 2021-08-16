@@ -78,7 +78,7 @@ const PokemonList: React.FC = () => {
           <List>
             {
               data?.data.results.map((pokemon, idx) => (
-                <ListItem onClick={() => push(`/${idx + 1}`)}>
+                <ListItem key={pokemon.name} onClick={() => push(`/${idx + 1}`)}>
                   <Image src={getImageUrl(idx + 1)} alt={pokemon.name} />
                   <Name>{pokemon.name}</Name>
                   <Index>{formatNumbering(idx + 1)}</Index>

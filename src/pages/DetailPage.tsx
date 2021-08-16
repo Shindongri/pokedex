@@ -9,9 +9,8 @@ import Stats from '../components/Stats';
 import Evolution from '../components/Evolution';
 
 import { PokemonResponse } from '../types';
-import { mapColorToHex } from "../utils";
-import usePokemonQuery from "../hooks/usePokemonQuery";
-import useSpeciesQuery from "../hooks/useSpecies";
+import usePokemonQuery from '../hooks/usePokemonQuery';
+import useSpeciesQuery from '../hooks/useSpecies';
 
 type Params = {
   id: string;
@@ -78,7 +77,7 @@ const DetailPage: React.FC = () => {
       />
       <TabsWrapper>
         <Tabs
-          color={mapColorToHex(speciesQueryResult.data?.data.color.name)}
+          color={color}
           tab={selectedTab}
           onClick={handleTabClick}
         />

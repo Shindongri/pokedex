@@ -1,10 +1,13 @@
 import React from 'react';
 import styled from '@emotion/styled/macro';
 
+import { Color } from '../types';
+import { mapColorToHex } from '../utils';
+
 type Props = {
   tab: 'about' | 'stats' | 'evolution';
   onClick: (tab: 'about' | 'stats' | 'evolution') => void;
-  color: string;
+  color?: Color;
 }
 
 const List = styled.ul`
@@ -34,13 +37,13 @@ const TabButton = styled.button<{ active?: boolean; color: string; }>`
 const Tabs: React.FC<Props> = ({ tab, onClick, color }) => (
   <List>
     <ListItem onClick={() => onClick('about')}>
-      <TabButton active={tab === 'about'} color={color}>About</TabButton>
+      <TabButton active={tab === 'about'} color={mapColorToHex(color?.name)}>About</TabButton>
     </ListItem>
     <ListItem onClick={() => onClick('stats')}>
-      <TabButton active={tab === 'stats'} color={color}>Stats</TabButton>
+      <TabButton active={tab === 'stats'} color={mapColorToHex(color?.name)}>Stats</TabButton>
     </ListItem>
     <ListItem onClick={() => onClick('evolution')}>
-      <TabButton active={tab === 'evolution'} color={color}>Evolution</TabButton>
+      <TabButton active={tab === 'evolution'} color={mapColorToHex(color?.name)}>Evolution</TabButton>
     </ListItem>
   </List>
 )
