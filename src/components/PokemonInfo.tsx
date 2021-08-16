@@ -92,7 +92,7 @@ const PokemonInfo: React.FC<Props> = ({ id, name, color, types }) => {
   return (
     <Base color={mapColorToHex(color?.name)}>
       <ImageWrapper>
-        <Image src="/pocketball.svg" />
+        <Image src="/assets/pocketball.svg" />
       </ImageWrapper>
       <InfoWrapper>
         <Name>
@@ -112,7 +112,7 @@ const PokemonInfo: React.FC<Props> = ({ id, name, color, types }) => {
             {
               types.map(({ type }, idx) => (
                 <TypeWrapper key={idx} color={mapTypeToHex(type.name)}>
-                  <TypeInfo src={`${type.name}.svg`} />
+                  <TypeInfo src={`/assets/${type.name}.svg`} />
                 </TypeWrapper>
               ))
             }

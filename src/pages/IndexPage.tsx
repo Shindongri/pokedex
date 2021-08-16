@@ -44,7 +44,7 @@ const IndexPage: React.FC = () => (
     <Description>The Pokédex contains detailed stats for every creature from the Pokémon games.</Description>
     <PokemonList />
     <ImageWrapper>
-      <Image src="/pocketball.svg" />
+      <Image src="/assets/pocketball.svg" />
     </ImageWrapper>
   </Container>
 )
