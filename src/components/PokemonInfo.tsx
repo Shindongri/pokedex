@@ -1,12 +1,14 @@
 import React from 'react';
 import styled from '@emotion/styled/macro';
 
-import { PokemonResponse, SpeciesResponse } from '../types';
-import {formatNumbering, mapColorToHex, mapTypeToHex} from "../utils";
+import { Color, Type } from '../types';
+import { formatNumbering, mapColorToHex, mapTypeToHex } from '../utils';
 
 type Props = {
-  pokemonData?: PokemonResponse;
-  speciesData?: SpeciesResponse;
+  id: string;
+  name?: string;
+  types?: Array<Type>;
+  color?: Color;
 }
 
 const Base = styled.div<{ color?: string }>`
@@ -67,7 +69,7 @@ const TypeList = styled.div`
   }
 `;
 
-const Type = styled.img`
+const TypeInfo = styled.img`
   height: 12px;
 `;
 
@@ -86,15 +88,9 @@ const Image = styled.img`
   object-fit: contain;
 `;
 
-const PokemonInfo: React.FC<Props> = ({ pokemonData, speciesData }) => {
-  const id = pokemonData?.id;
-  const name = pokemonData?.name;
-  const order = pokemonData?.order;
-  const types = pokemonData?.types;
-  const color = speciesData?.color.name;
-
+const PokemonInfo: React.FC<Props> = ({ id, name, color, types }) => {
   return (
-    <Base color={mapColorToHex(color)}>
+    <Base color={mapColorToHex(color?.name)}>
       <ImageWrapper>
         <Image src="/pocketball.svg" />
       </ImageWrapper>
@@ -103,9 +99,9 @@ const PokemonInfo: React.FC<Props> = ({ pokemonData, speciesData }) => {
           {name}
         </Name>
         {
-          order && (
+          id && (
             <Index>
-              {formatNumbering(order)}
+              {formatNumbering(id)}
             </Index>
           )
         }
@@ -116,7 +112,7 @@ const PokemonInfo: React.FC<Props> = ({ pokemonData, speciesData }) => {
             {
               types.map(({ type }, idx) => (
                 <TypeWrapper key={idx} color={mapTypeToHex(type.name)}>
-                  <Type src={`${type.name}.svg`} />
+                  <TypeInfo src={`${type.name}.svg`} />
                 </TypeWrapper>
               ))
             }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import styled from '@emotion/styled/macro';
 
 const Base = styled.div`
@@ -18,12 +18,14 @@ const SearchInput = styled.input`
   padding: 8px 12px;
 `;
 
-const SearchForm: React.FC = () => {
-  return (
-    <Base>
-      <SearchInput placeholder="Search for a Pokémon" />
-    </Base>
-  )
+interface Props {
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
+
+const SearchForm: React.FC<Props> = ({ onChange }) => (
+  <Base>
+    <SearchInput placeholder="Search for a Pokémon" onChange={onChange} />
+  </Base>
+)
 
 export default SearchForm;

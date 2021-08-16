@@ -1,14 +1,24 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 import styled from "@emotion/styled/macro";
 
-import { PokemonResponse, SpeciesResponse } from '../types';
+import { Ability, Color, Type } from '../types';
 import PokedexData from './PokedexData';
 import Abilities from './Abilities';
 import { mapTypeToHex } from '../utils';
 
 type Props = {
-  pokemonData?: PokemonResponse;
-  speciesData?: SpeciesResponse;
+  isLoading: boolean;
+  color?: Color;
+  growthRate?: string;
+  flavorText?: string;
+  genderRate?: number;
+  isLegendary?: boolean;
+  isMythical?: boolean;
+  types?: Array<Type>;
+  weight?: number;
+  height?: number;
+  baseExp?: number;
+  abilities?: Array<Ability>;
 }
 
 const Base = styled.article`
@@ -49,64 +59,73 @@ const TypeLabel = styled.span`
   font-size: 10px;
 `;
 
-const About: React.FC<Props> = ({ pokemonData, speciesData }) => {
-  const {
-    weight,
-    height,
-    growthRate,
-    flavorText,
-    types,
-    baseExp,
-    genderRate,
-    isLegendary,
-    isMythical,
-    abilities,
-    color,
-  } = useMemo(() => {
-    return {
-      height: pokemonData?.height,
-      weight: pokemonData?.weight,
-      abilities: pokemonData?.abilities,
-      types: pokemonData?.types,
-      baseExp: pokemonData?.base_experience,
-      growthRate: speciesData?.growth_rate.name,
-      flavorText: speciesData?.flavor_text_entries[0].flavor_text,
-      genderRate: speciesData?.gender_rate,
-      isLegendary: speciesData?.is_legendary,
-      isMythical: speciesData?.is_mythical,
-      color: speciesData?.color.name
-    }
-  }, [pokemonData, speciesData]);
+const ImageWrapper = styled.div`
+  width: 100%;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
+const Image = styled.img`
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+`;
+
+const About: React.FC<Props> = ({
+  isLoading,
+  isMythical,
+  isLegendary,
+  types,
+  weight,
+  flavorText,
+  growthRate,
+  genderRate,
+  color,
+  height,
+  baseExp,
+  abilities,
+  }) => {
   const rarity = isLegendary ? 'Legendary' : isMythical ? 'Mythical' : 'Normal';
 
   return (
     <Base>
       <FlavorText>{flavorText}</FlavorText>
       {
-        types && (
-          <TypeList>
+        isLoading ? (
+          <ImageWrapper>
+            <Image src="/loading.gif" />
+          </ImageWrapper>
+        ) : (
+          <>
             {
-              types.map(({ type }, idx) => (
-                <TypeWrapper key={idx} color={mapTypeToHex(type.name)}>
-                  <TypeImage src={`${type.name}.svg`} />
-                  <TypeLabel>{type.name.toUpperCase()}</TypeLabel>
-                </TypeWrapper>
-              ))
+              types && (
+                <TypeList>
+                  {
+                    types.map(({ type }, idx) => (
+                      <TypeWrapper key={idx} color={mapTypeToHex(type.name)}>
+                        <TypeImage src={`${type.name}.svg`} />
+                        <TypeLabel>{type.name.toUpperCase()}</TypeLabel>
+                      </TypeWrapper>
+                    ))
+                  }
+                </TypeList>
+              )
             }
-          </TypeList>
+            <PokedexData
+              weight={weight}
+              height={height}
+              genderRate={genderRate}
+              growthRate={growthRate}
+              baseExp={baseExp}
+              rarity={rarity}
+              color={color}
+            />
+            {abilities && <Abilities abilities={abilities} color={color} />}
+          </>
         )
       }
-      <PokedexData
-        weight={weight}
-        height={height}
-        genderRate={genderRate}
-        growthRate={growthRate}
-        baseExp={baseExp}
-        rarity={rarity}
-        color={color}
-      />
-      {abilities && color && <Abilities abilities={abilities} color={color} />}
     </Base>
   )
 }

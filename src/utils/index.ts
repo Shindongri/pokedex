@@ -39,5 +39,5 @@ export const mapTypeToHex = (type?: string) => {
   }
 }
 
-export const formatNumbering = (pokemonIndex: number): string =>
-  `#${String(pokemonIndex).padStart(3, '0')}`
+export const formatNumbering = (pokemonIndex: number | string): string =>
+  `#${(typeof pokemonIndex === 'number' ? String(pokemonIndex) : pokemonIndex).padStart(3, '0')}`

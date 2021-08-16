@@ -1,11 +1,9 @@
 import React from 'react';
-import { useQueries } from 'react-query';
-import { AxiosResponse } from 'axios';
 import styled from '@emotion/styled/macro';
-import { UseQueryResult } from 'react-query/types/react/types';
 
-import { PokemonResponse } from '../types';
-import { pokemonApi } from '../apis/poketmonApi';
+import { Color } from '../types';
+import { usePokemonQueries } from '../hooks/usePokemonQuery';
+import { mapColorToHex } from '../utils';
 
 interface Props {
   from: {
@@ -17,7 +15,7 @@ interface Props {
     url: string;
   }
   level: number;
-  color: string;
+  color?: Color;
 }
 
 const DividerWrapper = styled.div`
@@ -57,26 +55,19 @@ const Base = styled.li`
 `;
 
 const EvolutionStage: React.FC<Props> = ({ from, to, level, color }) => {
-  const results = useQueries(
-    [from.name, to.name].map((name, idx) => ({
-      queryKey: ['evolution', idx],
-      queryFn: () => pokemonApi(name)
-    }))
-  );
-
-  const [fromPokemon, toPokemon] = results as Array<UseQueryResult<AxiosResponse<PokemonResponse>, Error>>;
+  const [prev, next] = usePokemonQueries([from.name, to.name]);
 
   return (
     <Base>
       <ImageWrapper>
-        <Image src={fromPokemon.data?.data.sprites.other["official-artwork"].front_default} />
+        <Image src={prev.data?.data.sprites.other["official-artwork"].front_default} />
       </ImageWrapper>
       <DividerWrapper>
-        <Text color={color}>{`Level ${level}`}</Text>
+        {level && <Text color={mapColorToHex(color?.name)}>{`Level ${level}`}</Text>}
         <Divider />
       </DividerWrapper>
       <ImageWrapper>
-        <Image src={toPokemon.data?.data.sprites.other["official-artwork"].front_default} />
+        <Image src={next.data?.data.sprites.other["official-artwork"].front_default} />
       </ImageWrapper>
     </Base>
   )

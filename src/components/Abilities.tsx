@@ -1,15 +1,13 @@
 import React from 'react';
-import styled from "@emotion/styled/macro";
-import { useQueries } from 'react-query';
-import axios, {AxiosResponse} from 'axios';
-import { UseQueryResult } from 'react-query/types/react/types';
+import styled from '@emotion/styled/macro';
 
-import { Ability, AbilityResponse, EffectEntry } from '../types';
+import { Ability, Color, EffectEntry } from '../types';
 import { mapColorToHex } from '../utils';
+import useAbilitiesQuery from "../hooks/useAbilitiesQuery";
 
 interface Props {
   abilities: Array<Ability>;
-  color: string;
+  color?: Color;
 }
 
 const Title = styled.h4<{ color: string }>`
@@ -54,12 +52,7 @@ const Description = styled.span`
 `;
 
 const Abilities: React.FC<Props> = ({ abilities, color }) => {
-  const results = useQueries(
-    abilities.map(({ ability }, idx) => ({
-      queryKey: ['ability', idx],
-      queryFn: () => axios.get(ability.url)
-    }))
-  );
+  const results = useAbilitiesQuery(abilities);
 
   const getEffectEntry = (effectEntries: Array<EffectEntry>) => {
     return effectEntries.find(effectEntry => effectEntry.language.name === 'en') || effectEntries[0];
@@ -67,10 +60,10 @@ const Abilities: React.FC<Props> = ({ abilities, color }) => {
 
   return (
     <Base>
-      <Title color={mapColorToHex(color)}>Abilities</Title>
+      <Title color={mapColorToHex(color?.name)}>Abilities</Title>
       <List>
         {
-          (results as Array<UseQueryResult<AxiosResponse<AbilityResponse>, Error>>).map(({ data }, idx) => (
+          results.map(({ data }, idx) => (
             data && (
               <ListItem key={idx}>
                 <Label>{data.data.name}</Label>

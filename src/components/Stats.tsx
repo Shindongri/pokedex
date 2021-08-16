@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from "@emotion/styled/macro";
 
-import { Stat, Type } from '../types';
+import { Color, Stat } from '../types';
 import { mapColorToHex } from '../utils';
 
 type Props = {
-  stats: Array<Stat>;
-  color: string;
-  types: Array<Type>;
+  isLoading: boolean;
+  stats?: Array<Stat>;
+  color?: Color;
 }
 
 const Base = styled.div`
@@ -64,17 +64,17 @@ const Gauge = styled.div<{ percentage: number; color: string; }>`
   border-radius: 12px;
 `;
 
-const Stats: React.FC<Props> = ({ stats, color, types }) => (
+const Stats: React.FC<Props> = ({ stats, color }) => (
   <Base>
-    <Title color={mapColorToHex(color)}>Base Stats</Title>
+    <Title color={mapColorToHex(color?.name)}>Base Stats</Title>
     <List>
       {
-        stats.map(({ stat, base_stat }, idx) => (
+        stats?.map(({ stat, base_stat }, idx) => (
           <ListItem key={idx}>
             <Name>{stat.name === 'hp' ? stat.name.toUpperCase() : stat.name}</Name>
             <Amount>{base_stat}</Amount>
             <GaugeWrapper>
-              <Gauge percentage={(base_stat / 255) * 100} color={mapColorToHex(color)} />
+              <Gauge percentage={(base_stat / 255) * 100} color={mapColorToHex(color?.name)} />
             </GaugeWrapper>
           </ListItem>
         ))

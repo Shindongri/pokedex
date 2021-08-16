@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled/macro';
 
-import SearchForm from '../components/SearchForm';
 import PokemonList from '../components/PokemonList';
 
 const Container = styled.div`
@@ -42,7 +41,6 @@ const Image = styled.img`
 const IndexPage: React.FC = () => (
   <Container>
     <Title>Pokédex</Title>
-    <SearchForm />
     <Description>The Pokédex contains detailed stats for every creature from the Pokémon games.</Description>
     <PokemonList />
     <ImageWrapper>

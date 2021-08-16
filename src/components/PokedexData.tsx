@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from "@emotion/styled/macro";
 import { mapColorToHex } from "../utils";
+import {Color} from "../types";
 
 const Base = styled.div`
   margin-top: 32px;
@@ -44,7 +45,7 @@ interface Props {
   growthRate?: string;
   baseExp?: number;
   rarity?: string;
-  color?: string;
+  color?: Color;
 }
 
 const PokedexData: React.FC<Props> = ({
@@ -57,56 +58,32 @@ const PokedexData: React.FC<Props> = ({
   rarity,
 }) => (
   <Base>
-    <Title color={mapColorToHex(color)}>Pokédex Data</Title>
+    <Title color={mapColorToHex(color?.name)}>Pokédex Data</Title>
     <InfoItemContainer>
-      {
-        height && (
-          <InfoItem>
-            <InfoItemLabel>Height</InfoItemLabel>
-            <InfoItemValue color={mapColorToHex(color)}>{height / 10}m</InfoItemValue>
-          </InfoItem>
-        )
-      }
-      {
-        weight && (
-          <InfoItem>
-            <InfoItemLabel>Weight</InfoItemLabel>
-            <InfoItemValue color={mapColorToHex(color)}>{weight / 10}kg</InfoItemValue>
-          </InfoItem>
-        )
-      }
-      {
-        genderRate && (
-          <InfoItem>
-            <InfoItemLabel>Gender</InfoItemLabel>
-            <InfoItemValue color={mapColorToHex(color)}>{genderRate === -1 ? 'Unknown' : 'Male / Female'}</InfoItemValue>
-          </InfoItem>
-        )
-      }
-      {
-        growthRate && (
-          <InfoItem>
-            <InfoItemLabel>Growth Rate</InfoItemLabel>
-            <InfoItemValue color={mapColorToHex(color)}>{growthRate}</InfoItemValue>
-          </InfoItem>
-        )
-      }
-      {
-        baseExp && (
-          <InfoItem>
-            <InfoItemLabel>Base Exp</InfoItemLabel>
-            <InfoItemValue color={mapColorToHex(color)}>{baseExp}</InfoItemValue>
-          </InfoItem>
-        )
-      }
-      {
-        rarity && (
-          <InfoItem>
-            <InfoItemLabel>Rarity</InfoItemLabel>
-            <InfoItemValue color={mapColorToHex(color)}>{rarity}</InfoItemValue>
-          </InfoItem>
-        )
-      }
+      <InfoItem>
+        <InfoItemLabel>Height</InfoItemLabel>
+        {height && <InfoItemValue color={mapColorToHex(color?.name)}>{height / 10}m</InfoItemValue>}
+      </InfoItem>
+      <InfoItem>
+        <InfoItemLabel>Weight</InfoItemLabel>
+        {weight && <InfoItemValue color={mapColorToHex(color?.name)}>{weight / 10}kg</InfoItemValue>}
+      </InfoItem>
+      <InfoItem>
+        <InfoItemLabel>Gender</InfoItemLabel>
+        {genderRate && <InfoItemValue color={mapColorToHex(color?.name)}>{genderRate === -1 ? 'Unknown' : 'Male / Female'}</InfoItemValue>}
+      </InfoItem>
+      <InfoItem>
+        <InfoItemLabel>Growth Rate</InfoItemLabel>
+        {growthRate && <InfoItemValue color={mapColorToHex(color?.name)}>{growthRate}</InfoItemValue>}
+      </InfoItem>
+      <InfoItem>
+        <InfoItemLabel>Base Exp</InfoItemLabel>
+        {baseExp && <InfoItemValue color={mapColorToHex(color?.name)}>{baseExp}</InfoItemValue>}
+      </InfoItem>
+      <InfoItem>
+        <InfoItemLabel>Rarity</InfoItemLabel>
+        {rarity && <InfoItemValue color={mapColorToHex(color?.name)}>{rarity}</InfoItemValue>}
+      </InfoItem>
     </InfoItemContainer>
   </Base>
 )

@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import { useQuery } from 'react-query';
-import axios, { AxiosResponse } from 'axios';
-import styled from "@emotion/styled/macro";
+import React, { useEffect, useState } from 'react';
+import styled from '@emotion/styled/macro';
 
-import { Chain, EvolutionChainResponse, SpeciesResponse } from '../types';
-import EvolutionStage from "./EvolutionStage";
-import {mapColorToHex} from "../utils";
+import { Chain, Color } from '../types';
+import EvolutionStage from './EvolutionStage';
+import { mapColorToHex } from '../utils';
+import useEvolutionChainQuery from "../hooks/useEvolutionChainQuery";
 
 type Props = {
+  isLoading: boolean;
   id?: string;
-  speciesData: SpeciesResponse;
-  color: string;
+  color?: Color;
+  url?: string;
 }
 
 const Base = styled.div`
@@ -27,17 +27,16 @@ const Title = styled.h4<{ color: string }>`
 `;
 
 const ImageWrapper = styled.div`
-  position: absolute;
-  width: 288px;
-  height: 288px;
-  right: -96px;
-  top: -96px;
-  opacity: 0.4;
+  width: 100%;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Image = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 120px;
+  height: 120px;
   object-fit: contain;
 `;
 
@@ -62,8 +61,8 @@ const Empty = styled.div<{ color: string }>`
   color: ${({ color }) => color};
 `;
 
-const Evolution: React.FC<Props> = ({ speciesData, id, color }) => {
-  const { data, isLoading, isSuccess } = useQuery<AxiosResponse<EvolutionChainResponse>, Error>(['evolution', { id }], () => axios.get(speciesData.evolution_chain.url), { retry: false, refetchOnWindowFocus: false });
+const Evolution: React.FC<Props> = ({ url, color }) => {
+  const { isSuccess, isError, isLoading, data } = useEvolutionChainQuery(url);
 
   const [evolutionChain, setEvolutionChain] = useState<Array<{ from: { name: string; url: string }, to: { name: string; url: string }, level: number }>>([]);
 
@@ -83,15 +82,19 @@ const Evolution: React.FC<Props> = ({ speciesData, id, color }) => {
     }
 
     isSuccess && data && makeEvolutionChain(data.data.chain);
+
+    return (): void => {
+      setEvolutionChain([]);
+    }
   }, [isSuccess, data]);
 
   return (
     <Base>
-      <Title color={mapColorToHex(color)}>Evolution</Title>
+      <Title color={mapColorToHex(color?.name)}>Evolution</Title>
       {
-        isLoading ? (
+        isLoading || isError ? (
           <ImageWrapper>
-            <Image src="/pocketball.svg" />
+            <Image src="/loading.gif" />
           </ImageWrapper>
         ) : (
           evolutionChain.length ? (
@@ -104,7 +107,7 @@ const Evolution: React.FC<Props> = ({ speciesData, id, color }) => {
             </List>
           ) : (
             <EmptyWrapper>
-              <Empty color={mapColorToHex(color)}>This Pokémon does not evolve.</Empty>
+              <Empty color={mapColorToHex(color?.name)}>This Pokémon does not evolve.</Empty>
             </EmptyWrapper>
           )
         )

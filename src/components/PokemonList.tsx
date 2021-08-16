@@ -1,12 +1,10 @@
 import React from 'react';
-import { useQuery } from 'react-query';
-import { AxiosResponse } from 'axios';
 import styled from '@emotion/styled/macro';
 import { useHistory } from 'react-router-dom';
 
 import { ListResponse } from '../types';
-import { pokemonApi } from '../apis/poketmonApi';
 import { formatNumbering } from '../utils';
+import usePokemonQuery from '../hooks/usePokemonQuery';
 
 const Base = styled.div`
   margin-top: 24px;
@@ -66,28 +64,26 @@ const getImageUrl = (pokemonIndex: number): string =>
   `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonIndex}.png`
 
 const PokemonList: React.FC = () => {
-  const { error, data, isLoading } = useQuery<AxiosResponse<ListResponse>, Error>('pokemonList', () => pokemonApi());
+  const { isLoading, isError, data } = usePokemonQuery<ListResponse>();
   const { push } = useHistory();
 
   return (
     <Base>
       {
-        isLoading || error ? (
+        isLoading || isError ? (
           <LoadingWrapper>
             <Loading src="/loading.gif" alt="loading" />
           </LoadingWrapper>
         ) : (
           <List>
             {
-              data?.data.results.map((pokemon, idx) => {
-                return (
-                  <ListItem onClick={() => push(`/${idx + 1}`)}>
-                    <Image src={getImageUrl(idx + 1)} alt={pokemon.name} />
-                    <Name>{pokemon.name}</Name>
-                    <Index>{formatNumbering(idx + 1)}</Index>
-                  </ListItem>
-                )
-              })
+              data?.data.results.map((pokemon, idx) => (
+                <ListItem onClick={() => push(`/${idx + 1}`)}>
+                  <Image src={getImageUrl(idx + 1)} alt={pokemon.name} />
+                  <Name>{pokemon.name}</Name>
+                  <Index>{formatNumbering(idx + 1)}</Index>
+                </ListItem>
+              ))
             }
           </List>
         )

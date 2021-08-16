@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled/macro';
-import { useQuery } from 'react-query';
-import { AxiosResponse } from 'axios';
 
 import PokemonInfo from '../components/PokemonInfo';
 import Tabs from '../components/Tabs';
@@ -10,12 +8,13 @@ import About from '../components/About';
 import Stats from '../components/Stats';
 import Evolution from '../components/Evolution';
 
-import { PokemonResponse, SpeciesResponse } from '../types';
-import { pokemonApi, speciesApi } from '../apis/poketmonApi';
-import {mapColorToHex} from "../utils";
+import { PokemonResponse } from '../types';
+import { mapColorToHex } from "../utils";
+import usePokemonQuery from "../hooks/usePokemonQuery";
+import useSpeciesQuery from "../hooks/useSpecies";
 
 type Params = {
-  id?: string;
+  id: string;
 }
 
 type Tab  = 'about' | 'stats' | 'evolution';
@@ -34,8 +33,36 @@ const DetailPage: React.FC = () => {
 
   const [selectedTab, setSelectedTab] = useState<Tab>('about');
 
-  const { data: pokemonData } = useQuery<AxiosResponse<PokemonResponse>, Error>(['pokemon', { id }], () => pokemonApi(id));
-  const { data: speciesData } = useQuery<AxiosResponse<SpeciesResponse>, Error>(['species', { id }], () => speciesApi(id));
+  const pokemonQueryResult = usePokemonQuery<PokemonResponse>(id);
+  const speciesQueryResult = useSpeciesQuery(id);
+
+  const { name, types, height, weight, abilities, baseExp, stats } = useMemo(() => ({
+    name: pokemonQueryResult.data?.data.name,
+    types: pokemonQueryResult.data?.data.types,
+    height: pokemonQueryResult.data?.data.height,
+    weight: pokemonQueryResult.data?.data.weight,
+    abilities: pokemonQueryResult.data?.data.abilities,
+    baseExp: pokemonQueryResult.data?.data.base_experience,
+    stats: pokemonQueryResult.data?.data.stats,
+  }), [pokemonQueryResult]);
+
+  const {
+    color,
+    growthRate,
+    flavorText,
+    genderRate,
+    isLegendary,
+    isMythical,
+    evolutionChainUrl,
+  } = useMemo(() => ({
+    color: speciesQueryResult.data?.data.color,
+    growthRate: speciesQueryResult.data?.data.growth_rate.name,
+    flavorText: speciesQueryResult.data?.data.flavor_text_entries[0].flavor_text,
+    genderRate: speciesQueryResult.data?.data.gender_rate,
+    isLegendary: speciesQueryResult.data?.data.is_legendary,
+    isMythical: speciesQueryResult.data?.data.is_mythical,
+    evolutionChainUrl: speciesQueryResult.data?.data.evolution_chain.url,
+  }), [speciesQueryResult]);
 
   const handleTabClick = (tab: Tab) => {
     setSelectedTab(tab);
@@ -43,28 +70,54 @@ const DetailPage: React.FC = () => {
 
   return (
     <Container>
-      <PokemonInfo pokemonData={pokemonData?.data} speciesData={speciesData?.data} />
+      <PokemonInfo
+        id={id}
+        name={name}
+        types={types}
+        color={color}
+      />
       <TabsWrapper>
-        <Tabs color={mapColorToHex(speciesData?.data.color.name)} tab={selectedTab} onClick={handleTabClick} />
+        <Tabs
+          color={mapColorToHex(speciesQueryResult.data?.data.color.name)}
+          tab={selectedTab}
+          onClick={handleTabClick}
+        />
       </TabsWrapper>
       {
         selectedTab === 'about' && (
           <About
-            pokemonData={pokemonData?.data}
-            speciesData={speciesData?.data}
+            isLoading={pokemonQueryResult.isLoading || speciesQueryResult.isLoading}
+            color={color}
+            growthRate={growthRate}
+            flavorText={flavorText}
+            genderRate={genderRate}
+            isLegendary={isLegendary}
+            isMythical={isMythical}
+            types={types}
+            weight={weight}
+            height={height}
+            baseExp={baseExp}
+            abilities={abilities}
           />
         )
       }
       {
-        selectedTab === 'stats' &&
-        speciesData &&
-        pokemonData &&
-        <Stats color={speciesData.data.color.name} stats={pokemonData.data.stats} types={pokemonData.data.types}
-        />
+        selectedTab === 'stats' && (
+          <Stats
+            isLoading={pokemonQueryResult.isLoading || speciesQueryResult.isLoading}
+            color={color}
+            stats={stats}
+          />
+        )
       }
       {
-        selectedTab === 'evolution' && speciesData && (
-          <Evolution id={id} color={speciesData?.data.color.name || '#6B7280'} speciesData={speciesData.data} />
+        selectedTab === 'evolution' && (
+          <Evolution
+            id={id}
+            isLoading={speciesQueryResult.isLoading}
+            color={color}
+            url={evolutionChainUrl}
+          />
         )
       }
     </Container>
