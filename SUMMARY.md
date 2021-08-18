@@ -6,7 +6,7 @@
 
 * [0. Overview](1-.-about-react-query/0.-overview.md)
 * [1. Important Defaults](1-.-about-react-query/untitled.md)
-* [2. Queries \(1\)](1-.-about-react-query/2.-queries-1.md)
+* [2. Queries - 기본사항](1-.-about-react-query/2.-queries-1.md)
 * [3. Queries \(2\)](1-.-about-react-query/3.-queries-2.md)
 * [4. Queries \(3\)](1-.-about-react-query/4.-queries-3.md)
 * [5. Mutations \(1\)](1-.-about-react-query/5.-mutations-1.md)
