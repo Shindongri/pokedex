@@ -19,6 +19,11 @@
 * [2. 에셋 다운로드](2-.-react-query/2..md)
 * [3. 라우터](2-.-react-query/3..md)
 * [4. QueryClientProvider](2-.-react-query/4.-queryclientprovider.md)
-* [5. 포켓몬 목록 페이지](2-.-react-query/5..md)
-* [6. 포켓몬 상세 페이지](2-.-react-query/6..md)
+* [5. API & Type definition](2-.-react-query/5.-api-and-type-definition.md)
+* [6. 포켓몬 목록 페이지](2-.-react-query/5./README.md)
+  * [6-1. 컴포넌트 스타일링](2-.-react-query/5./6-1..md)
+  * [6-2. API 연동](2-.-react-query/5./6-2.-api.md)
+* [7. 포켓몬 상세 페이지](2-.-react-query/6./README.md)
+  * [7-1. 컴포넌트 스타일링](2-.-react-query/6./7-1..md)
+  * [7-2. API 연동](2-.-react-query/6./7-2.-api.md)
 
