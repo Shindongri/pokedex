@@ -11,7 +11,6 @@
 * [4. Queries - 무한 쿼리](1-.-about-react-query/4.-queries-3.md)
 * [5. Mutations - 기본사항](1-.-about-react-query/5.-mutations-1.md)
 * [6. Mutations - 응답 업데이트](1-.-about-react-query/6.-mutations-2.md)
-* [7. Mutations - 최적화](1-.-about-react-query/7.-mutations-3.md)
 
 ## 2장. React-Query 를 이용해 포켓몬 도감 만들기
 
