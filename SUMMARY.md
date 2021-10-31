@@ -10,7 +10,8 @@
 * [3. Queries - 병렬 & 종속 쿼리](1-.-about-react-query/3.-queries-2.md)
 * [4. Queries - 무한 쿼리](1-.-about-react-query/4.-queries-3.md)
 * [5. Mutations - 기본사항](1-.-about-react-query/5.-mutations-1.md)
-* [6. Mutations - 응답 업데이트](1-.-about-react-query/6.-mutations-2.md)
+* [6. Mutations - 무효화](1-.-about-react-query/6.-mutations.md)
+* [7. Mutations - 응답 업데이트](1-.-about-react-query/6.-mutations-2.md)
 
 ## 2장. React-Query 를 이용해 포켓몬 도감 만들기
 
@@ -30,4 +31,3 @@
     * [7-2-1. Species API](2-.-react-query/6./7-2.-api/7-2-1.-species-api.md)
     * [7-2-2. Abilities API](2-.-react-query/6./7-2.-api/7-2-2.-abilities-api.md)
     * [7-2-3. Evolution Chain API](2-.-react-query/6./7-2.-api/7-2-3.-evolution-chain-api.md)
-
