@@ -1,6 +1,6 @@
 # 1. Important Defaults
 
-`useQuery`, `useInfiniteQuery` 를 통한 쿼리 인스턴스는 기본적으로 캐시된 데이터를 오래된\(stale\) 데이터로 간주합니다.
+`useQuery`, `useInfiniteQuery` 를 통한 쿼리 인스턴스는 기본적으로 캐시된 데이터를 오래된(stale) 데이터로 간주합니다.
 
 {% hint style="info" %}
 이 동작을 변경하려면 `staleTime` 옵션을 변경하여 글로벌 또는 각 쿼리 당 데이터를 refetch 하는 시간 간격을 조정할 수 있습니다.
@@ -22,7 +22,7 @@
 기본적으로 `inactive` 쿼리는 **5분** 뒤에 가비지 콜렉팅 됩니다.
 
 {% hint style="info" %}
-쿼리의 기본 `cacheTime 을`**`1000 * 60 * 5 ms`** `가 아닌 다른 값으로 변경할 수 있습니다.`
+쿼리의 기본 `cacheTime 을`**`1000 * 60 * 5 ms`**` ``가 아닌 다른 값으로 변경할 수 있습니다.`
 {% endhint %}
 
 실패한 쿼리를 캡쳐하여 UI 에 에러를 표시하기 전에 **3회** 자동으로 retry 합니다.
@@ -42,4 +42,3 @@ JSON 과 호환되는 값만 동작하고, 다른 유형의 데이터 포맷은 
 
 쿼리 응답이 JSON과 호환되지 않는데도 데이터가 변경되었는지 확인하려면 `config.isDataEqual` 을 사용하여 데이터 비교 기능을 커스텀 할 수 있습니다.
 {% endhint %}
-
